@@ -12,6 +12,6 @@ Basically this [https://learn.microsoft.com/en-us/entra/identity-platform/tutori
 ## Use
 
 Run `node . --op operation` where _operation_ is one of 
-* `getUsers` -- List of all users in the tenant.
-* `getUser` -- Details of the `.env:MAIL_FROM` user, may be a shared mailbox.
-* `sendMail` -- Sends a test message from `.env:MAIL_FROM` to `.env:MAIL_TO`
+* `getUsers` -- List of all users in the tenant. See [https://learn.microsoft.com/en-us/graph/api/user-list?view=graph-rest-1.0&tabs=http](https://learn.microsoft.com/en-us/graph/api/user-list?view=graph-rest-1.0&tabs=http)
+* `getUser` -- Details of the `.env:MAIL_FROM` user, may be a shared mailbox. See [https://learn.microsoft.com/en-us/graph/api/user-get?view=graph-rest-1.0&tabs=http](https://learn.microsoft.com/en-us/graph/api/user-get?view=graph-rest-1.0&tabs=http)
+* `sendMail` -- Sends a test message from `.env:MAIL_FROM` to `.env:MAIL_TO`. See [https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0&tabs=http](https://learn.microsoft.com/en-us/graph/api/user-sendmail?view=graph-rest-1.0&tabs=http)
