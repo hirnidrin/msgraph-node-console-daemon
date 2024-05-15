@@ -18,23 +18,67 @@ async function main() {
 
     switch (yargs.argv['op']) {
         case 'getUsers':
-
             try {
                 // here we get an access token
                 const authResponse = await auth.getToken(auth.tokenRequest);
-
                 // call the web API with the access token
-                const users = await fetch.callApi(auth.apiConfig.uri, authResponse.accessToken);
-
+                const uri = process.env.GRAPH_ENDPOINT + '/v1.0/users'
+                const result = await fetch.callApi(uri, authResponse.accessToken);
                 // display result
-                console.log(users);
+                console.log(result);
             } catch (error) {
                 console.log(error);
             }
-
+            break;
+        case 'getUser':
+            try {
+                // setup the action
+                const upn = process.env.MAIL_FROM
+                const uri = process.env.GRAPH_ENDPOINT + `/v1.0/users/${upn}`
+                // here we get an access token
+                const authResponse = await auth.getToken(auth.tokenRequest);
+                // call the web API with the access token
+                const result = await fetch.callApi(uri, authResponse.accessToken);
+                // display result
+                console.log(result);
+            } catch (error) {
+                console.log(error);
+            }
+            break;
+        case 'sendMail':
+            try {
+                // setup the action
+                const upn = process.env.MAIL_FROM
+                const uri = process.env.GRAPH_ENDPOINT + `/v1.0/users/${upn}/sendMail`
+                // setup the mail
+                const msg = {
+                    message: {
+                      subject: 'Mail thru MS Graph API',
+                      body: {
+                        contentType: 'Text',
+                        content: 'The new cafeteria is open :)'
+                      },
+                      toRecipients: [
+                        {
+                          emailAddress: {
+                            address: process.env.MAIL_TO
+                          }
+                        }
+                      ]
+                    }
+                }
+                // here we get an access token
+                const authResponse = await auth.getToken(auth.tokenRequest);
+                // call the web API with the access token
+                const result = await fetch.postApi(uri, authResponse.accessToken, msg);
+                // display result
+                console.log(result);
+            } catch (error) {
+                console.log(error);
+            }
             break;
         default:
-            console.log('Select a Graph operation first');
+            console.log('Available operations: getUsers | getUser | sendMail');
             break;
     }
 };
