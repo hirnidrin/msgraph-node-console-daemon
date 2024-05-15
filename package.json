@@ -1,0 +1,12 @@
+{
+  "name": "node-console-daemon",
+  "version": "1.0.0",
+  "main": "bin/index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@azure/msal-node": "^2.8.1",
+    "axios": "^1.6.8",
+    "dotenv": "^16.4.5",
+    "yargs": "^17.7.2"
+  }
+}
