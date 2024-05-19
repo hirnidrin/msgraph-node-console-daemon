@@ -1,22 +1,24 @@
 #!/usr/bin/env node
 
-// read in env settings
-require('dotenv').config()
+import 'dotenv/config' // import dotenv module and parse .env -> process.env.ABCs are populated
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
+import * as auth from './auth.js'
+import * as fetch from './fetch.js'
 
-const yargs = require('yargs')
-
-const fetch = require('./fetch')
-const auth = require('./auth')
-
-const options = yargs
+// setup the argv parser, typescript async style
+// see https://github.com/yargs/yargs/blob/main/docs/typescript.md
+const parser = yargs(hideBin(process.argv))
   .usage('Usage: --op <operation_name>')
   .option('op', { alias: 'operation', describe: 'operation name', type: 'string', demandOption: true })
-  .argv
 
+// run the cli program
 async function main () {
-  console.log(`You have selected: ${options.op}`)
-
-  switch (yargs.argv.op) {
+  // get the args
+  const argv = await parser.parse()
+  console.log(`Selected operation: ${argv.op}`)
+  // run the chosen operation
+  switch (argv.op) {
     case 'getUsers':
       try {
         // here we get an access token
@@ -70,17 +72,16 @@ async function main () {
         // here we get an access token
         const authResponse = await auth.getToken(auth.tokenRequest)
         // call the web API with the access token
-        const result = await fetch.postApi(uri, authResponse.accessToken, msg)
-        // display result
-        console.log(result)
+        // sendMail returns no data, only HTTP status 202... or raises an error
+        await fetch.postApi(uri, authResponse.accessToken, msg)
       } catch (error) {
         console.log(error)
       }
       break
     default:
-      console.log('Available operations: getUsers | getUser | sendMail')
+      console.log('Select an available operation: getUsers | getUser | sendMail')
       break
   }
-};
+}
 
 main()
